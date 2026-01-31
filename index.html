@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detroit — The Ultimate Motor City Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0a0a0f;
+            --steel: #1a1a24;
+            --chrome: #2d2d3a;
+            --rust: #c45c26;
+            --copper: #d4956a;
+            --gold: #e8b923;
+            --ice: #f0f0f5;
+            --mist: rgba(240,240,245,0.08);
+            --glow: rgba(232,185,35,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: var(--ink);
+            color: var(--ice);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Grain Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Bebas Neue', Impact, sans-serif;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, 
+                    rgba(10,10,15,0.3) 0%, 
+                    rgba(10,10,15,0.5) 50%,
+                    rgba(10,10,15,0.95) 100%),
+                radial-gradient(ellipse at 30% 20%, rgba(196,92,38,0.15) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 1000px;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 0.3s forwards;
+        }
+
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: '';
+            width: 60px;
+            height: 1px;
+            background: var(--copper);
+        }
+
+        .hero-title {
+            font-size: clamp(4rem, 15vw, 12rem);
+            line-height: 0.9;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--ice) 0%, var(--copper) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: fadeSlideUp 1.2s ease 0.5s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            font-style: italic;
+            color: var(--copper);
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 0.7s forwards;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 0.9s forwards;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 1.2s forwards;
+        }
+
+        .scroll-cue span {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--copper), transparent);
+            animation: scrollPulse 2s ease infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { transform: scaleY(1); opacity: 1; }
+            50% { transform: scaleY(0.5); opacity: 0.5; }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            transition: all 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(10,10,15,0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 3rem;
+            border-bottom: 1px solid var(--mist);
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            color: var(--ice);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--ice);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            color: var(--gold);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-number {
+            display: block;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5rem;
+            line-height: 1;
+            color: var(--chrome);
+            opacity: 0.3;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 0.5rem;
+            color: var(--ice);
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--copper);
+        }
+
+        /* Why Detroit Section */
+        .why-detroit {
+            background: linear-gradient(135deg, var(--steel) 0%, var(--ink) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-detroit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0V0zm30 30v30h30V30H30zm0-30v30h30V0H30z' fill='%23ffffff' fill-opacity='0.02'/%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-card {
+            background: var(--mist);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 2px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 0;
+            background: var(--rust);
+            transition: height 0.4s ease;
+        }
+
+        .why-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--rust);
+            background: rgba(196,92,38,0.05);
+        }
+
+        .why-card:hover::before {
+            height: 100%;
+        }
+
+        .why-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .why-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .why-card p {
+            opacity: 0.8;
+            font-size: 1.05rem;
+        }
+
+        /* Neighborhoods Section */
+        .neighborhoods {
+            background: var(--ink);
+        }
+
+        .hood-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .hood-card {
+            position: relative;
+            border-radius: 3px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        .hood-card:nth-child(1) { grid-column: span 8; grid-row: span 2; }
+        .hood-card:nth-child(2) { grid-column: span 4; }
+        .hood-card:nth-child(3) { grid-column: span 4; }
+        .hood-card:nth-child(4) { grid-column: span 6; }
+        .hood-card:nth-child(5) { grid-column: span 6; }
+        .hood-card:nth-child(6) { grid-column: span 4; }
+        .hood-card:nth-child(7) { grid-column: span 4; }
+        .hood-card:nth-child(8) { grid-column: span 4; }
+
+        .hood-card:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .hood-image {
+            width: 100%;
+            height: 100%;
+            min-height: 250px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .hood-card:hover .hood-image {
+            transform: scale(1.1);
+        }
+
+        .hood-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(10,10,15,0.95) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            transition: background 0.4s ease;
+        }
+
+        .hood-card:hover .hood-overlay {
+            background: linear-gradient(180deg, rgba(196,92,38,0.2) 0%, rgba(10,10,15,0.98) 100%);
+        }
+
+        .hood-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--rust);
+            color: var(--ice);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            width: fit-content;
+        }
+
+        .hood-name {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hood-desc {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .hood-card:hover .hood-desc {
+            max-height: 200px;
+        }
+
+        /* Itinerary Section */
+        .itinerary {
+            background: linear-gradient(180deg, var(--steel) 0%, var(--ink) 100%);
+        }
+
+        .day-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .day-tab {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid var(--chrome);
+            color: var(--ice);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-tab::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--rust);
+            transition: height 0.3s ease;
+            z-index: -1;
+        }
+
+        .day-tab:hover::before,
+        .day-tab.active::before {
+            height: 100%;
+        }
+
+        .day-tab.active {
+            border-color: var(--rust);
+        }
+
+        .day-content {
+            display: none;
+        }
+
+        .day-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .day-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--chrome);
+        }
+
+        .day-header h3 {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .day-header p {
+            font-style: italic;
+            color: var(--copper);
+            font-size: 1.2rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--rust), var(--gold), var(--rust));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            align-items: start;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            grid-column: 3;
+        }
+
+        .timeline-item:nth-child(even) .timeline-empty {
+            grid-column: 1;
+        }
+
+        .timeline-time {
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .time-bubble {
+            width: 60px;
+            height: 60px;
+            background: var(--rust);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--ice);
+            box-shadow: 0 0 30px rgba(196,92,38,0.3);
+        }
+
+        .timeline-content {
+            grid-column: 1;
+            background: var(--mist);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: var(--rust);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .timeline-body {
+            padding: 1.5rem;
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: rgba(232,185,35,0.15);
+            color: var(--gold);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-title {
+            font-size: 1.6rem;
+            margin-bottom: 0.75rem;
+            color: var(--ice);
+        }
+
+        .timeline-desc {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--chrome);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .meta-item svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--copper);
+        }
+
+        .timeline-tips {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(196,92,38,0.1);
+            border-left: 2px solid var(--rust);
+        }
+
+        .timeline-tips strong {
+            color: var(--gold);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .timeline-tips p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Food Section */
+        .food-section {
+            background: var(--ink);
+            position: relative;
+        }
+
+        .food-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--rust), transparent);
+        }
+
+        .food-categories {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .food-cat-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--chrome);
+            color: var(--ice);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .food-cat-btn:hover,
+        .food-cat-btn.active {
+            background: var(--rust);
+            border-color: var(--rust);
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .food-card {
+            background: var(--mist);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .food-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--rust);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+
+        .food-image-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .food-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .food-card:hover .food-image {
+            transform: scale(1.1);
+        }
+
+        .food-price {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(10,10,15,0.9);
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        .food-body {
+            padding: 1.5rem;
+        }
+
+        .food-cuisine {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--rust);
+            margin-bottom: 0.5rem;
+        }
+
+        .food-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-desc {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .food-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--chrome);
+        }
+
+        .food-location {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        .food-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .food-rating svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold);
+        }
+
+        /* Experiences Section */
+        .experiences {
+            background: linear-gradient(135deg, var(--steel) 0%, var(--ink) 100%);
+        }
+
+        .exp-masonry {
+            columns: 3;
+            column-gap: 1.5rem;
+        }
+
+        .exp-card {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            background: var(--mist);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .exp-card:hover {
+            transform: scale(1.02);
+            border-color: var(--gold);
+        }
+
+        .exp-card img {
+            width: 100%;
+            display: block;
+        }
+
+        .exp-body {
+            padding: 1.5rem;
+        }
+
+        .exp-tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--gold);
+            color: var(--ink);
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+
+        .exp-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .exp-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Map Section */
+        .map-section {
+            background: var(--ink);
+            padding: 0;
+        }
+
+        .map-container {
+            position: relative;
+            height: 600px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(100%) invert(92%) contrast(90%);
+        }
+
+        .map-overlay-card {
+            position: absolute;
+            top: 3rem;
+            left: 3rem;
+            background: rgba(10,10,15,0.95);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            max-width: 400px;
+            border: 1px solid var(--chrome);
+        }
+
+        .map-overlay-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .map-legend {
+            list-style: none;
+        }
+
+        .map-legend li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--chrome);
+            font-size: 0.9rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.culture { background: var(--gold); }
+        .legend-dot.food { background: var(--rust); }
+        .legend-dot.nature { background: #4ade80; }
+        .legend-dot.music { background: #a78bfa; }
+
+        /* Practical Info */
+        .practical {
+            background: linear-gradient(180deg, var(--steel) 0%, var(--ink) 100%);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: var(--mist);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 3px;
+        }
+
+        .info-card h4 {
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-card h4 span {
+            font-size: 1.5rem;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--chrome);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-list li::before {
+            content: '→';
+            color: var(--rust);
+            flex-shrink: 0;
+        }
+
+        /* Packing Section */
+        .packing {
+            background: var(--ink);
+        }
+
+        .packing-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pack-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--mist);
+            border: 1px solid var(--chrome);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pack-item:hover {
+            border-color: var(--rust);
+            background: rgba(196,92,38,0.1);
+        }
+
+        .pack-item input {
+            accent-color: var(--rust);
+            width: 16px;
+            height: 16px;
+        }
+
+        .pack-item.checked {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--steel);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--chrome);
+        }
+
+        .footer-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--ice), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-text {
+            font-style: italic;
+            color: var(--copper);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--ice);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hood-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .hood-card:nth-child(1) { grid-column: span 6; grid-row: span 1; }
+            .hood-card:nth-child(2),
+            .hood-card:nth-child(3) { grid-column: span 3; }
+            .hood-card:nth-child(4),
+            .hood-card:nth-child(5) { grid-column: span 3; }
+            .hood-card:nth-child(6),
+            .hood-card:nth-child(7),
+            .hood-card:nth-child(8) { grid-column: span 2; }
+
+            .timeline::before {
+                left: 30px;
+            }
+            .timeline-item {
+                grid-template-columns: 60px 1fr;
+                gap: 1.5rem;
+            }
+            .timeline-time {
+                grid-column: 1;
+            }
+            .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                grid-column: 2;
+            }
+            .timeline-empty {
+                display: none;
+            }
+            .time-bubble {
+                width: 50px;
+                height: 50px;
+                font-size: 0.6rem;
+            }
+
+            .exp-masonry {
+                columns: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .hood-grid {
+                grid-template-columns: 1fr;
+            }
+            .hood-card:nth-child(n) { grid-column: span 1; }
+
+            .day-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            .day-tab {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .exp-masonry {
+                columns: 1;
+            }
+
+            .map-overlay-card {
+                position: relative;
+                top: 0;
+                left: 0;
+                max-width: 100%;
+            }
+            .map-container {
+                height: auto;
+            }
+            .map-container iframe {
+                height: 400px;
+            }
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">DETROIT</a>
+        <ul class="nav-links">
+            <li><a href="#why">Why Detroit</a></li>
+            <li><a href="#neighborhoods">Neighborhoods</a></li>
+            <li><a href="#itinerary">Itinerary</a></li>
+            <li><a href="#food">Food</a></li>
+            <li><a href="#experiences">Experiences</a></li>
+            <li><a href="#practical">Practical</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-video-container">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80" alt="Detroit Skyline" class="hero-video" style="object-fit: cover;">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-eyebrow mono">The Ultimate Guide to America's Comeback City</div>
+            <h1 class="hero-title">DETROIT</h1>
+            <p class="hero-subtitle">Where Grit Meets Glory — Art, Music, Food & Renaissance</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">3</div>
+                    <div class="hero-stat-label">Days of Adventure</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">18</div>
+                    <div class="hero-stat-label">Must-See Spots</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">12</div>
+                    <div class="hero-stat-label">Top Restaurants</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">8</div>
+                    <div class="hero-stat-label">Neighborhoods</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-cue" onclick="document.getElementById('why').scrollIntoView({behavior: 'smooth'})">
+            <span class="mono">Explore</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Why Detroit Section -->
+    <section class="why-detroit" id="why">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Why Detroit, Why Now</h2>
+                <p class="section-subtitle">The Motor City's second act is in full swing</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card reveal reveal-delay-1">
+                    <div class="why-icon">🎨</div>
+                    <h3>World-Class Art</h3>
+                    <p>Home to Diego Rivera's masterwork murals, the DIA's 65,000+ artworks, and an explosion of street art that's transformed entire neighborhoods into open-air galleries.</p>
+                </div>
+                <div class="why-card reveal reveal-delay-2">
+                    <div class="why-icon">🎵</div>
+                    <h3>Birthplace of Sound</h3>
+                    <p>Motown. Techno. The White Stripes. Jack White's Third Man Records. Detroit's musical DNA is woven into every genre that matters.</p>
+                </div>
+                <div class="why-card reveal reveal-delay-3">
+                    <div class="why-icon">🍽️</div>
+                    <h3>James Beard Territory</h3>
+                    <p>Multiple James Beard nominees and winners. Detroit-style pizza conquered the world. African, Middle Eastern, and soul food scenes rival any coast.</p>
+                </div>
+                <div class="why-card reveal reveal-delay-4">
+                    <div class="why-icon">🏛️</div>
+                    <h3>Architectural Revival</h3>
+                    <p>Michigan Central Station's $950M restoration. The Guardian Building's Art Deco splendor. A skyline being reborn tower by tower.</p>
+                </div>
+                <div class="why-card reveal reveal-delay-1">
+                    <div class="why-icon">💰</div>
+                    <h3>Real Value</h3>
+                    <p>World-class experiences at Midwest prices. Five-star dining for NYC lunch money. Hotels that don't require a second mortgage.</p>
+                </div>
+                <div class="why-card reveal reveal-delay-2">
+                    <div class="why-icon">🌊</div>
+                    <h3>Waterfront Wonder</h3>
+                    <p>5.5 miles of revitalized riverwalk. Belle Isle's 987 acres of parks. Canada across the water. Fresh Great Lakes air.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neighborhoods Section -->
+    <section class="neighborhoods" id="neighborhoods">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Know Your Neighborhoods</h2>
+                <p class="section-subtitle">Each district tells a different story</p>
+            </div>
+            <div class="hood-grid">
+                <div class="hood-card reveal">
+                    <img src="https://images.unsplash.com/photo-1533557213878-ecf690c8a8e3?w=800&q=80" alt="Downtown Detroit" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Iconic</span>
+                        <h3 class="hood-name">Downtown</h3>
+                        <p class="hood-desc">The Renaissance Center, Guardian Building, Campus Martius, and the People Mover. Detroit's commercial heart beats stronger than ever with new hotels, restaurants, and the restored Michigan Central Station.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="Corktown" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Historic</span>
+                        <h3 class="hood-name">Corktown</h3>
+                        <p class="hood-desc">Detroit's oldest neighborhood. Victorian charm meets culinary revolution. Slows BBQ, Two James Distillery, and Instagram-worthy murals.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-2">
+                    <img src="https://images.unsplash.com/photo-1580537659466-0a9bfa916a54?w=600&q=80" alt="Midtown" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Cultural</span>
+                        <h3 class="hood-name">Midtown</h3>
+                        <p class="hood-desc">The DIA, MOCAD, and the Charles H. Wright Museum. College town energy meets serious culture.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=700&q=80" alt="Eastern Market" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Vibrant</span>
+                        <h3 class="hood-name">Eastern Market</h3>
+                        <p class="hood-desc">America's largest historic public market since 1891. Saturday market is unmissable — 250+ vendors, murals everywhere, and Detroit's creative soul on full display.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-2">
+                    <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?w=700&q=80" alt="Brush Park" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Rising</span>
+                        <h3 class="hood-name">Brush Park</h3>
+                        <p class="hood-desc">Victorian mansions reborn. The hottest new restaurants (Leña, SheWolf). Little Caesars Arena. Where old money architecture meets new money investment.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&q=80" alt="West Village" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Charming</span>
+                        <h3 class="hood-name">West Village</h3>
+                        <p class="hood-desc">Marrow. Sister Pie. Craft coffee. Walkable, beautiful, and delicious.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-2">
+                    <img src="https://images.unsplash.com/photo-1533557213878-ecf690c8a8e3?w=500&q=80" alt="Greektown" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Classic</span>
+                        <h3 class="hood-name">Greektown</h3>
+                        <p class="hood-desc">Flaming saganaki since forever. Neon lights. Late-night energy.</p>
+                    </div>
+                </div>
+                <div class="hood-card reveal reveal-delay-3">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Belle Isle" class="hood-image">
+                    <div class="hood-overlay">
+                        <span class="hood-tag">Nature</span>
+                        <h3 class="hood-name">Belle Isle</h3>
+                        <p class="hood-desc">987-acre island paradise. Olmsted design. Best skyline views in the city.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Itinerary Section -->
+    <section class="itinerary" id="itinerary">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Your 3-Day Journey</h2>
+                <p class="section-subtitle">A curated path through the Motor City</p>
+            </div>
+
+            <div class="day-tabs">
+                <button class="day-tab active" onclick="showDay(1)">Day 1 — Art & History</button>
+                <button class="day-tab" onclick="showDay(2)">Day 2 — Music & Markets</button>
+                <button class="day-tab" onclick="showDay(3)">Day 3 — Waterfront & Hidden Gems</button>
+            </div>
+
+            <!-- Day 1 -->
+            <div class="day-content active" id="day1">
+                <div class="day-header">
+                    <h3>Art, Architecture & Corktown</h3>
+                    <p>From Diego Rivera to Michigan Central — A visual feast</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">9 AM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800&q=80" alt="Detroit Institute of Arts" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Must-See</span>
+                                <h4 class="timeline-title">Detroit Institute of Arts</h4>
+                                <p class="timeline-desc">Stand before Diego Rivera's Detroit Industry Murals — 27 panels depicting the city's industrial soul. Then wander through Van Gogh, Rembrandt, and ancient Egyptian galleries. One of America's finest museums, period.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        5200 Woodward Ave
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        2-3 hours
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        FREE (tri-county)
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Pro Tip</strong>
+                                    <p>Friday nights feature live jazz and extended hours until 10pm. The perfect start to a Detroit evening.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">12 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80" alt="Baobab Fare" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Lunch</span>
+                                <h4 class="timeline-title">Baobab Fare</h4>
+                                <p class="timeline-desc">James Beard-honored East African cuisine from Burundian refugees. The Igisafuriya (stewed goat) and chapati wraps are revelatory. A quintessential Detroit success story in every bite.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        New Center
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $15-25
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">2 PM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="Michigan Central Station" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Iconic</span>
+                                <h4 class="timeline-title">Michigan Central Station</h4>
+                                <p class="timeline-desc">The $950 million restoration that symbolizes Detroit's renaissance. This Beaux-Arts masterpiece, once the world's tallest rail station, sat vacant for 30 years before Ford brought it roaring back to life in 2024.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Corktown
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        1-2 hours
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Don't Miss</strong>
+                                    <p>The surrounding Roosevelt Park has stunning photo angles of the restored station.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">4 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1572715376701-98568319fd0b?w=800&q=80" alt="Corktown" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Explore</span>
+                                <h4 class="timeline-title">Wander Corktown</h4>
+                                <p class="timeline-desc">Detroit's oldest neighborhood is a Victorian dream with craft cocktails. Browse Eldorado General Store, taste whiskey at Two James Distillery (Michigan's first since Prohibition), and soak in the creative energy.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        2 hours
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">7 PM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Marrow Detroit" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Dinner</span>
+                                <h4 class="timeline-title">Marrow</h4>
+                                <p class="timeline-desc">Chef Sarah Welch's whole-animal butchery meets Great Lakes ingredients. The bone marrow is mandatory. James Beard nominated and worth every penny.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        West Village
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $$$
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Book Ahead</strong>
+                                    <p>Reserve on Resy at least a week in advance. This place fills up fast.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="day-content" id="day2">
+                <div class="day-header">
+                    <h3>Sound, Soul & Saturday Vibes</h3>
+                    <p>From Hitsville to Eastern Market — Experience Detroit's heartbeat</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">8 AM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&q=80" alt="Eastern Market" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Essential</span>
+                                <h4 class="timeline-title">Eastern Market (Saturday)</h4>
+                                <p class="timeline-desc">America's largest historic public market since 1891. 250+ vendors selling everything from flowers to fresh meats. The murals alone are worth the trip. Come hungry — endless food vendors await.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        6am-4pm Saturdays
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Must Try</strong>
+                                    <p>Detroit-style pizza from Supino's. Rocky Peanut butter cups at Cost Plus Wine. The flower district sheds are stunning.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">11 AM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80" alt="Motown Museum" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Legendary</span>
+                                <h4 class="timeline-title">Motown Museum (Hitsville U.S.A.)</h4>
+                                <p class="timeline-desc">The Supremes. The Temptations. Stevie Wonder. Marvin Gaye. Stand in Studio A where Berry Gordy built an empire that changed music forever. The original house where it all began.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        90 min tour
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $20
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>⚠️ Critical</strong>
+                                    <p>BOOK WEEKS IN ADVANCE. Tours sell out. Undergoing $75M expansion but Hitsville USA remains the heart.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">1 PM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="Greektown" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Lunch</span>
+                                <h4 class="timeline-title">Greektown</h4>
+                                <p class="timeline-desc">Flaming saganaki, crispy lamb chops, and ouzo since forever. Detroit's historic Greek neighborhood on Monroe Street. Order the "OPA!" cheese and don't be shy about it.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $15-25
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">3 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80" alt="Third Man Records" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Music</span>
+                                <h4 class="timeline-title">Third Man Records</h4>
+                                <p class="timeline-desc">Jack White's record label HQ. Browse limited-edition vinyl, watch records being pressed in the Cass Corridor location, and feel Detroit's musical pulse in a temple to analog sound.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Midtown
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">5 PM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1533557213878-ecf690c8a8e3?w=800&q=80" alt="Guardian Building" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Architecture</span>
+                                <h4 class="timeline-title">Guardian Building</h4>
+                                <p class="timeline-desc">Detroit's "Cathedral of Finance" — pure Art Deco majesty. The Aztec-inspired interior with Pewabic tile is jaw-dropping. Free to enter, impossible to forget.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Downtown
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        FREE
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">7:30 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" alt="Leña" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Dinner</span>
+                                <h4 class="timeline-title">Leña</h4>
+                                <p class="timeline-desc">Spanish and Catalan fire cooking in gorgeous Brush Park. Wood-grilled octopus, pintxos, and an excellent wine list. The hearth-roasted proteins are transcendent.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Brush Park
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $$$
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="day-content" id="day3">
+                <div class="day-header">
+                    <h3>Nature, Water & Hidden Treasures</h3>
+                    <p>Belle Isle, the Riverwalk, and local secrets</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">9 AM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Belle Isle" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Nature</span>
+                                <h4 class="timeline-title">Belle Isle Park</h4>
+                                <p class="timeline-desc">987 acres of island paradise designed by Frederick Law Olmsted. Visit the Anna Scripps Whitcomb Conservatory (stunning Victorian greenhouse), the free Belle Isle Aquarium, and catch the best skyline views in Detroit.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        2-3 hours
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $12 Recreation Passport
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Golden Hour</strong>
+                                    <p>Sunset views from the west tip of the island are magical. Worth planning around.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">12 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80" alt="Sister Pie" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Brunch</span>
+                                <h4 class="timeline-title">Sister Pie</h4>
+                                <p class="timeline-desc">James Beard-nominated bakery in West Village. Flaky hand pies, coffee cake, and the Salted Maple Pie that put Lisa Ludwinski on the map. Get there early — it sells out.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        West Village
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $$
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">2 PM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Detroit Riverwalk" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Scenic</span>
+                                <h4 class="timeline-title">Detroit Riverwalk & RenCen</h4>
+                                <p class="timeline-desc">Stroll 5.5 miles of revitalized waterfront. View Canada across the river, see new cars on display in GM's Renaissance Center lobby, and enjoy public art installations along the way.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        1.5-2 hours
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        FREE
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Bonus</strong>
+                                    <p>Bike rentals available along the path. The free People Mover loops downtown if your feet need a break.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">4 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=800&q=80" alt="MOCAD" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Art</span>
+                                <h4 class="timeline-title">MOCAD</h4>
+                                <p class="timeline-desc">Museum of Contemporary Art Detroit in a former auto dealership. Cutting-edge rotating exhibitions, artist talks, and a café. Free admission — tip what you can.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Midtown
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                        1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">6 PM</div>
+                        </div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&q=80" alt="Sugar House" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Cocktails</span>
+                                <h4 class="timeline-title">Sugar House</h4>
+                                <p class="timeline-desc">Speakeasy-style craft cocktails in Corktown. Exposed brick, dim lighting, and some of the best bartenders in the Midwest. The Old Fashioned variations are legendary.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Corktown
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-time">
+                            <div class="time-bubble">8 PM</div>
+                        </div>
+                        <div class="timeline-empty"></div>
+                        <div class="timeline-content">
+                            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80" alt="SheWolf Pastificio" class="timeline-image">
+                            <div class="timeline-body">
+                                <span class="timeline-badge">Dinner</span>
+                                <h4 class="timeline-title">SheWolf Pastificio</h4>
+                                <p class="timeline-desc">House-made pasta that rivals anything in Italy. The Cacio e Pepe is perfection. Warm lighting, impeccable service, and a wine list that goes deep on Italian producers.</p>
+                                <div class="timeline-meta">
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                        Brush Park
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/></svg>
+                                        $$$
+                                    </div>
+                                </div>
+                                <div class="timeline-tips">
+                                    <strong>Finale</strong>
+                                    <p>End your Detroit adventure with handmade pasta and a Negroni. You've earned it.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Food Section -->
+    <section class="food-section" id="food">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Eat Like a Local</h2>
+                <p class="section-subtitle">Detroit's culinary renaissance in 12 essential spots</p>
+            </div>
+
+            <div class="food-categories">
+                <button class="food-cat-btn active" onclick="filterFood('all')">All</button>
+                <button class="food-cat-btn" onclick="filterFood('fine')">Fine Dining</button>
+                <button class="food-cat-btn" onclick="filterFood('casual')">Casual</button>
+                <button class="food-cat-btn" onclick="filterFood('ethnic')">Global</button>
+                <button class="food-cat-btn" onclick="filterFood('detroit')">Detroit Icons</button>
+            </div>
+
+            <div class="food-grid">
+                <div class="food-card reveal" data-category="fine">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Marrow" class="food-image">
+                        <span class="food-price">$$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">New American</span>
+                        <h4 class="food-name">Marrow</h4>
+                        <p class="food-desc">Whole-animal butchery meets Great Lakes ingredients. The bone marrow and beef heart are mandatory.</p>
+                        <div class="food-footer">
+                            <span class="food-location">West Village</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.8
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-1" data-category="ethnic">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Baobab Fare" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">East African</span>
+                        <h4 class="food-name">Baobab Fare</h4>
+                        <p class="food-desc">James Beard-honored Burundian cuisine. The Igisafuriya (stewed goat) is transcendent.</p>
+                        <div class="food-footer">
+                            <span class="food-location">New Center</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.7
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-2" data-category="fine">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Leña" class="food-image">
+                        <span class="food-price">$$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Spanish/Catalan</span>
+                        <h4 class="food-name">Leña</h4>
+                        <p class="food-desc">Wood-fired Catalan cooking. Pintxos, grilled octopus, and hearth-roasted meats.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Brush Park</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.7
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal" data-category="fine">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80" alt="SheWolf" class="food-image">
+                        <span class="food-price">$$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Italian</span>
+                        <h4 class="food-name">SheWolf Pastificio</h4>
+                        <p class="food-desc">House-made pasta that rivals Italy. Cacio e Pepe perfection.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Brush Park</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.8
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-1" data-category="detroit">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80" alt="Buddy's Pizza" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Detroit-Style Pizza</span>
+                        <h4 class="food-name">Buddy's Pizza</h4>
+                        <p class="food-desc">The OG since 1946. Thick, crispy-edged, square slices with cheese to the edge.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Multiple Locations</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.5
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-2" data-category="ethnic">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80" alt="Nepantla" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Mexican (Vegan)</span>
+                        <h4 class="food-name">Nepantla</h4>
+                        <p class="food-desc">James Beard semifinalist. Lion's mane pastor tacos are legendary.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Southwest</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.7
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal" data-category="casual">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80" alt="Slows BBQ" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">BBQ</span>
+                        <h4 class="food-name">Slows Bar-B-Q</h4>
+                        <p class="food-desc">Corktown institution. Brisket, pulled pork, and craft beer in a converted auto shop.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Corktown</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.4
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-1" data-category="fine">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&q=80" alt="Hiroki-San" class="food-image">
+                        <span class="food-price">$$$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Japanese</span>
+                        <h4 class="food-name">Hiroki-San</h4>
+                        <p class="food-desc">Stunning Japanese in the renovated Book Tower basement. Artful sushi, robata grill.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Downtown</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.8
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-2" data-category="casual">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=600&q=80" alt="Selden Standard" class="food-image">
+                        <span class="food-price">$$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Farm-to-Table</span>
+                        <h4 class="food-name">Selden Standard</h4>
+                        <p class="food-desc">Midtown pioneer. Seasonal small plates, excellent brunch, craft cocktails.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Midtown</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.6
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal" data-category="detroit">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80" alt="Sister Pie" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Bakery</span>
+                        <h4 class="food-name">Sister Pie</h4>
+                        <p class="food-desc">James Beard-nominated. Salted Maple Pie is legendary. Get there early.</p>
+                        <div class="food-footer">
+                            <span class="food-location">West Village</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.8
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-1" data-category="ethnic">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=600&q=80" alt="Dearborn" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Middle Eastern</span>
+                        <h4 class="food-name">Al-Ameer (Dearborn)</h4>
+                        <p class="food-desc">Dearborn has the largest Arab-American community. Al-Ameer's lamb shank is perfection.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Dearborn</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.6
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="food-card reveal reveal-delay-2" data-category="casual">
+                    <div class="food-image-container">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" alt="Bar Chenin" class="food-image">
+                        <span class="food-price">$$</span>
+                    </div>
+                    <div class="food-body">
+                        <span class="food-cuisine">Wine Bar</span>
+                        <h4 class="food-name">Bar Chenin</h4>
+                        <p class="food-desc">James Beard semifinalist. Natural wines, Mediterranean small plates, carefree vibes.</p>
+                        <div class="food-footer">
+                            <span class="food-location">Southwest</span>
+                            <span class="food-rating">
+                                <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                4.7
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiences Section -->
+    <section class="experiences" id="experiences">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">05</span>
+                <h2 class="section-title">Beyond the Basics</h2>
+                <p class="section-subtitle">Unique Detroit experiences most visitors miss</p>
+            </div>
+
+            <div class="exp-masonry">
+                <div class="exp-card reveal">
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80" alt="Live Music" style="height: 280px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Music</span>
+                        <h4 class="exp-title">Catch Live Techno</h4>
+                        <p class="exp-desc">Detroit invented techno. Catch a set at TV Lounge, Magic Stick, or Marble Bar for an authentic electronic music experience.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Street Art" style="height: 200px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Art</span>
+                        <h4 class="exp-title">Eastern Market Murals</h4>
+                        <p class="exp-desc">100+ murals transform the district into an open-air gallery. Self-guided tour any day of the week.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-2">
+                    <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=600&q=80" alt="Ford Rouge" style="height: 320px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Heritage</span>
+                        <h4 class="exp-title">Ford Rouge Factory Tour</h4>
+                        <p class="exp-desc">Watch F-150s roll off the line at Ford's historic Rouge plant. Industrial tourism at its finest.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Heidelberg Project" style="height: 240px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Art</span>
+                        <h4 class="exp-title">The Heidelberg Project</h4>
+                        <p class="exp-desc">Tyree Guyton's outdoor art installation transformed a blighted block into a thought-provoking experience.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80" alt="Speakeasy" style="height: 180px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Nightlife</span>
+                        <h4 class="exp-title">Speakeasy Hopping</h4>
+                        <p class="exp-desc">Sugar House, Bad Luck Bar, and The Skip. Detroit's cocktail scene punches above its weight.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-2">
+                    <img src="https://images.unsplash.com/photo-1533557213878-ecf690c8a8e3?w=600&q=80" alt="Windsor" style="height: 260px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Day Trip</span>
+                        <h4 class="exp-title">Pop Over to Canada</h4>
+                        <p class="exp-desc">Windsor is a 5-minute tunnel ride away. Different drinking age, different vibe. Bring your passport.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal">
+                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=80" alt="Detroit Sports" style="height: 200px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">Sports</span>
+                        <h4 class="exp-title">Catch a Game</h4>
+                        <p class="exp-desc">Tigers at Comerica Park, Lions at Ford Field, or Pistons/Red Wings at Little Caesars Arena — all walkable downtown.</p>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-1">
+                    <img src="https://images.unsplash.com/photo-1569863959165-56dae551d4fc?w=600&q=80" alt="Charles H Wright" style="height: 300px; object-fit: cover;">
+                    <div class="exp-body">
+                        <span class="exp-tag">History</span>
+                        <h4 class="exp-title">Charles H. Wright Museum</h4>
+                        <p class="exp-desc">The world's largest museum dedicated to African American history. The "And Still We Rise" exhibit is essential.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="map-container">
+            <div class="map-overlay-card">
+                <h3>Navigate Detroit</h3>
+                <ul class="map-legend">
+                    <li><span class="legend-dot culture"></span> Cultural Attractions</li>
+                    <li><span class="legend-dot food"></span> Must-Eat Restaurants</li>
+                    <li><span class="legend-dot nature"></span> Parks & Outdoors</li>
+                    <li><span class="legend-dot music"></span> Music & Nightlife</li>
+                </ul>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">Pro tip: The People Mover is free and loops downtown in 12 minutes.</p>
+            </div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47193.97389088454!2d-83.11598605!3d42.353582!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8824ca0b2bd8b8d1%3A0x8d9e5e04cc8e40a3!2sDetroit%2C%20MI!5e0!3m2!1sen!2sus!4v1706000000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <!-- Practical Info Section -->
+    <section class="practical" id="practical">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">06</span>
+                <h2 class="section-title">Know Before You Go</h2>
+                <p class="section-subtitle">Essential intel for your Detroit adventure</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card reveal">
+                    <h4><span>🚗</span> Getting Around</h4>
+                    <ul class="info-list">
+                        <li>People Mover: Free monorail loops downtown in 12 minutes</li>
+                        <li>QLine: Streetcar along Woodward Ave (Midtown to downtown)</li>
+                        <li>Rideshare: Uber/Lyft widely available and affordable</li>
+                        <li>Rental car: Recommended for Belle Isle and wider exploration</li>
+                        <li>Parking: Affordable lots downtown, often free evenings/weekends</li>
+                    </ul>
+                </div>
+
+                <div class="info-card reveal reveal-delay-1">
+                    <h4><span>📅</span> Best Times to Visit</h4>
+                    <ul class="info-list">
+                        <li>Spring/Summer (May-Sept): Best weather, outdoor patios, festivals</li>
+                        <li>Movement Festival: Memorial Day weekend — world's largest electronic music fest</li>
+                        <li>Saturdays: Essential for Eastern Market</li>
+                        <li>Fall: Beautiful colors at Belle Isle, fewer crowds</li>
+                        <li>Winter: Bundle up but enjoy cozy restaurants, lower hotel rates</li>
+                    </ul>
+                </div>
+
+                <div class="info-card reveal reveal-delay-2">
+                    <h4><span>💰</span> Budget Tips</h4>
+                    <ul class="info-list">
+                        <li>DIA: Free for Wayne, Oakland, Macomb county residents</li>
+                        <li>Eastern Market: Cash vendors, ATMs on site</li>
+                        <li>Estimated 3-day budget: $400-600/person (excluding hotel)</li>
+                        <li>Book Motown weeks ahead — tours sell out</li>
+                        <li>World-class food at Midwest prices</li>
+                    </ul>
+                </div>
+
+                <div class="info-card reveal">
+                    <h4><span>🏨</span> Where to Stay</h4>
+                    <ul class="info-list">
+                        <li>Downtown: Shinola Hotel (boutique), Detroit Foundation Hotel (historic)</li>
+                        <li>Midtown: Siren Hotel (design-forward), Trumbull & Porter (budget)</li>
+                        <li>Corktown: Airbnb options in Victorian homes</li>
+                        <li>Splurge: The Siren's rooftop bar views are worth it</li>
+                    </ul>
+                </div>
+
+                <div class="info-card reveal reveal-delay-1">
+                    <h4><span>📱</span> Book Ahead</h4>
+                    <ul class="info-list">
+                        <li>Motown Museum: Book 2-4 weeks out — always sells out</li>
+                        <li>Marrow, Leña, SheWolf: Reserve on Resy at least a week ahead</li>
+                        <li>Ford Rouge Tour: Book online, limited availability</li>
+                        <li>Sister Pie: Arrive early — sells out daily</li>
+                    </ul>
+                </div>
+
+                <div class="info-card reveal reveal-delay-2">
+                    <h4><span>🛡️</span> Safety & Tips</h4>
+                    <ul class="info-list">
+                        <li>Detroit is safer than its reputation — use normal city awareness</li>
+                        <li>Stick to the neighborhoods in this guide</li>
+                        <li>Rideshare at night from less-traveled areas</li>
+                        <li>Canadian border is 5 mins away — passport = Windsor adventure</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Packing Section -->
+    <section class="packing">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-number">07</span>
+                <h2 class="section-title">Pack List</h2>
+                <p class="section-subtitle">Check off as you pack</p>
+            </div>
+
+            <div class="packing-grid">
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Comfortable walking shoes</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Camera</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Layers (weather varies!)</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Cash for market</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Motown tickets</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Dinner reservations</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Belle Isle Passport</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Reusable bag</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Passport (for Windsor)</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Portable charger</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Light rain jacket</label>
+                <label class="pack-item"><input type="checkbox" onchange="togglePacked(this)"> Sense of adventure</label>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h2 class="footer-title">See You in Detroit</h2>
+        <p class="footer-text">The Motor City is calling. Answer it.</p>
+        <div class="footer-links">
+            <a href="#why" class="footer-link">Why Detroit</a>
+            <a href="#neighborhoods" class="footer-link">Neighborhoods</a>
+            <a href="#itinerary" class="footer-link">Itinerary</a>
+            <a href="#food" class="footer-link">Food</a>
+            <a href="#experiences" class="footer-link">Experiences</a>
+            <a href="#practical" class="footer-link">Practical Info</a>
+        </div>
+        <p style="margin-top: 3rem; opacity: 0.4; font-size: 0.8rem;">Built with ❤️ for your Detroit adventure</p>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Day tabs
+        function showDay(dayNum) {
+            document.querySelectorAll('.day-tab').forEach((tab, i) => {
+                tab.classList.toggle('active', i === dayNum - 1);
+            });
+            document.querySelectorAll('.day-content').forEach((content, i) => {
+                content.classList.toggle('active', i === dayNum - 1);
+            });
+        }
+
+        // Food filter
+        function filterFood(category) {
+            document.querySelectorAll('.food-cat-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.food-card').forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Packing checkbox
+        function togglePacked(checkbox) {
+            checkbox.closest('.pack-item').classList.toggle('checked', checkbox.checked);
+        }
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
